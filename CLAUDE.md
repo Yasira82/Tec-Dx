@@ -1,15 +1,63 @@
-# TEC Domain App Template — Claude Code Instructions
+# TEC DX — Claude Code Instructions
 
-## What This Repo Is
+> ⚡ **SESSION START:** اقرأ `knowledge-base/C-02___CURRENT_STATE_.md` + **app charter
+> `knowledge-base/C-115___DX_INSTITUTIONAL_CHARTER.md`** من `yasira82/tec-knowledge-base` (branch: `main`).
 
-The **golden starter template** for a new app in the TEC Federated Platform.
-It ships a correct, Portal-ready skeleton: Hub SSO, dual-mode Pi payments,
-CSRF, legal pages, and CI policy guards. Clone it, run the "New app setup"
-checklist below, and you have a compliant app — no missing pieces.
+## What This App Is
 
-**Reference of record:** `yasira82/tec-knowledge-base` — especially
-`C-12_Dual_Mode_Payment.md` (payment + anti-regression) and
-`audits/PORTAL_SUBMISSION_RUNBOOK_*.md`.
+**The Developer Platform** for the Pi economy (C-115) — the **System of
+Construction**. DX answers one question:
+
+```
+"How do I build a Pi app easily?"
+```
+
+DX distributes the **SDKs, starter templates, certified capabilities, docs,
+and guides** that let external builders, AI agents, and partner teams create
+economic value on TEC/Pi. Without DX, TEC grows only as fast as one team builds;
+with DX, 1000 builders create 1000 services — the platform becomes an economy.
+
+Built from `tec-template-base` (Next.js 15 frontend).
+
+**Current Phase: DX V0/V1 — Developer Portal (read-only).** Identity / domain /
+slug / legal + a read-only portal: **SDK catalog** (@yasser172/*), **starter
+templates**, **capability catalog** (mirrors SYSTEM's C-94 certified capabilities),
+**copy-paste quickstart guides** (+ `/guide/[id]`), and **DX Builder Pro** (the Pi
+Portal "Process a Transaction" gate). A real registry + API-key management + CLI
+are Phase 1+. Not yet deployed.
+
+---
+
+## Pi App Identity
+
+| Field | Value |
+|-------|-------|
+| **App** | TEC DX |
+| **Domain** | `https://dx.tecosystem.app` |
+| **Pi App ID** | ⏳ TBD — register at Pi Developer Portal · then Vercel `NEXT_PUBLIC_PI_APP_ID` |
+| **APP_SOURCE slug** | `dx` (payment-service resolves `PI_API_KEY_DX`) |
+| **PI_SANDBOX** | `false` (Mainnet) |
+
+---
+
+## DX-Specific Rules (C-115)
+
+### The boundary — DX distributes; it does NOT certify or secure
+DX **OWNS**: SDK distribution (@yasser172/tec-sdk · tec-auth · tec-ui), developer
+docs + guides, API access management (keys/tiers/rate limits), the template library,
+capability **distribution**, and the builder certification program. DX does **NOT OWN**:
+- **Capability CERTIFICATION** → SYSTEM (C-110 / C-94). DX presents the certified list; it never certifies.
+- **API Gateway security** → tec-api-gateway. **Builder code security review** → NX.
+- **Capability business logic** → the domain services. **AI reasoning** → TEC AI (C-104).
+
+### Distribution integrity
+Only **certified** capabilities (from the C-94 registry) are distributed as usable.
+The catalog is public read-only info; API-key issuance + rate-limit tiers are
+governed (server-side), never client-trusted (P6). Identity from the session cookie.
+
+**Reference of record:** `yasira82/tec-knowledge-base` —
+`C-115___DX_INSTITUTIONAL_CHARTER.md` (charter) + `C-94` (capability registry) +
+`C-12_Dual_Mode_Payment.md` (payment anti-regression) + `C-123` (session/cookies).
 
 ---
 
