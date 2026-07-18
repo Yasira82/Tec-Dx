@@ -13,7 +13,10 @@ import { TEC_COLORS } from '@yasser172/tec-ui';
 import { DxPro } from './components/DxPro';
 import {
   SDKS, TEMPLATES, CAPABILITIES, CAP_STATUS_META, GUIDES,
+  type Sdk, type Template, type Capability, type Guide,
 } from '@/lib/dx/catalog';
+
+type GuideSummary = Pick<Guide, 'id' | 'title' | 'blurb' | 'lang'>;
 
 export default function DxHome() {
   const { user, isLoading } = usePiAuth();
@@ -23,8 +26,27 @@ export default function DxHome() {
   const copy = (text: string, id: string) => {
     try { void navigator.clipboard?.writeText(text); setCopied(id); setTimeout(() => setCopied(''), 1200); } catch { /* clipboard blocked */ }
   };
-  // Warm the BFF (serves the same catalog; a real registry later). Non-blocking.
-  useEffect(() => { void fetch('/api/bff/dx/catalog', { credentials: 'include' }).catch(() => {}); }, []);
+
+  // The developer catalog — live from the backend DX catalog, or the curated
+  // fallback so the portal is never blank. Guides are summaries (no code body here).
+  const [sdks,         setSdks]         = useState<Sdk[]>(SDKS);
+  const [templates,    setTemplates]    = useState<Template[]>(TEMPLATES);
+  const [capabilities, setCapabilities] = useState<Capability[]>(CAPABILITIES);
+  const [guides,       setGuides]       = useState<GuideSummary[]>(GUIDES.map(({ id, title, blurb, lang }) => ({ id, title, blurb, lang })));
+  useEffect(() => {
+    let alive = true;
+    fetch('/api/bff/dx/catalog', { credentials: 'include', cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!alive || !d) return;
+        if (Array.isArray(d.sdks))         setSdks(d.sdks as Sdk[]);
+        if (Array.isArray(d.templates))    setTemplates(d.templates as Template[]);
+        if (Array.isArray(d.capabilities)) setCapabilities(d.capabilities as Capability[]);
+        if (Array.isArray(d.guides))       setGuides(d.guides as GuideSummary[]);
+      })
+      .catch(() => { /* keep the curated catalog */ });
+    return () => { alive = false; };
+  }, []);
 
   const card: React.CSSProperties = {
     background: TEC_COLORS.surface, border: `1px solid ${TEC_COLORS.gold}22`,
@@ -59,7 +81,7 @@ export default function DxHome() {
         <section style={{ marginTop: 28 }}>
           <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>SDKs</h2>
           <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {SDKS.map((s) => (
+            {sdks.map((s) => (
               <div key={s.id} style={card}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{s.name}</span>
@@ -78,7 +100,7 @@ export default function DxHome() {
         <section style={{ marginTop: 28 }}>
           <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Starter templates</h2>
           <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {TEMPLATES.map((t) => (
+            {templates.map((t) => (
               <div key={t.id} style={card}>
                 <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.gold }}>{t.name}</div>
                 <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{t.summary}</div>
@@ -94,7 +116,7 @@ export default function DxHome() {
         <section style={{ marginTop: 28 }}>
           <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Capabilities <span style={{ fontSize: 12, color: TEC_COLORS.subtext, fontWeight: 600 }}>(certified by SYSTEM · C-94)</span></h2>
           <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {CAPABILITIES.map((c) => {
+            {capabilities.map((c) => {
               const st = CAP_STATUS_META[c.status];
               return (
                 <div key={c.id} style={card}>
@@ -114,7 +136,7 @@ export default function DxHome() {
         <section style={{ marginTop: 28 }}>
           <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Quickstart</h2>
           <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {GUIDES.map((g) => (
+            {guides.map((g) => (
               <Link key={g.id} href={`/guide/${g.id}`} style={{ ...card, display: 'block', textDecoration: 'none' }}>
                 <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{g.title} →</div>
                 <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{g.blurb}</div>

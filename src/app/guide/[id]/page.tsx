@@ -5,10 +5,14 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { TEC_COLORS } from '@yasser172/tec-ui';
 import { getGuide, GUIDES } from '@/lib/dx/catalog';
+import { resolveGuide } from '@/lib/dx/server';
 
+// Pre-render the curated guide ids; allow live-only backend guides to render on
+// demand (the DX catalog is the guide registry of record — C-115 §4).
 export function generateStaticParams() {
   return GUIDES.map((g) => ({ id: g.id }));
 }
+export const dynamicParams = true;
 
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> },
@@ -25,7 +29,9 @@ export default async function GuidePage(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const g = getGuide(id);
+  // Resolve from the live DX catalog (with the runnable code); fall back to the
+  // curated guide so the page never 500s. A live 404 is authoritative → "not found".
+  const { guide: g } = await resolveGuide(id);
 
   const wrap: React.CSSProperties = {
     minHeight: '100vh', background: TEC_COLORS.bg, color: TEC_COLORS.text,
