@@ -65,7 +65,7 @@ export interface ResolvedCatalog {
   templates:    Template[];
   capabilities: Capability[];
   guides:       GuideSummary[];
-  source:       'live' | 'sample';
+  source:       'live' | 'catalog';
 }
 
 // The whole developer catalog — live backend first, curated catalog as fallback.
@@ -88,10 +88,10 @@ export async function resolveCatalog(): Promise<ResolvedCatalog> {
       }
     } catch { /* fall through to the curated catalog */ }
   }
-  return { sdks: SDKS, templates: TEMPLATES, capabilities: CAPABILITIES, guides: sampleGuides, source: 'sample' };
+  return { sdks: SDKS, templates: TEMPLATES, capabilities: CAPABILITIES, guides: sampleGuides, source: 'catalog' };
 }
 
-export interface ResolvedGuide { guide: Guide | null; source: 'live' | 'sample'; }
+export interface ResolvedGuide { guide: Guide | null; source: 'live' | 'catalog'; }
 
 // One guide (with code) by id — live backend first, sample fallback. A live 404 is
 // authoritative (guide: null, source: 'live').
@@ -108,5 +108,5 @@ export async function resolveGuide(id: string): Promise<ResolvedGuide> {
       if (res.status === 404) return { guide: null, source: 'live' };
     } catch { /* fall through to the curated catalog */ }
   }
-  return { guide: getGuide(id), source: 'sample' };
+  return { guide: getGuide(id), source: 'catalog' };
 }
