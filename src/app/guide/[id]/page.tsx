@@ -4,15 +4,13 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { getGuide, GUIDES } from '@/lib/dx/catalog';
+import { getGuide } from '@/lib/dx/catalog';
 import { resolveGuide } from '@/lib/dx/server';
 
-// Pre-render the curated guide ids; allow live-only backend guides to render on
-// demand (the DX catalog is the guide registry of record — C-115 §4).
-export function generateStaticParams() {
-  return GUIDES.map((g) => ({ id: g.id }));
-}
-export const dynamicParams = true;
+// Rendered dynamically from the live DX catalog (resolveGuide does a no-store
+// gateway fetch); the guides are DX's definitional developer-portal content, with
+// the local catalog as the offline copy. A live 404 is authoritative → notFound().
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> },
