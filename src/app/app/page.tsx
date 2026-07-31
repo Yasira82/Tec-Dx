@@ -7,6 +7,7 @@
 // (C-115 §4). This V1 is a curated read-only catalog served by /api/bff/dx/catalog;
 // a real registry + CLI + API-key management land in Phase 1+.
 import Link from 'next/link';
+import { InviteCard } from '@/components/referral/InviteCard';
 import { useEffect, useState } from 'react';
 import { usePiAuth } from '@yasser172/tec-auth';
 import { TEC_COLORS } from '@yasser172/tec-ui';
@@ -150,6 +151,7 @@ export default function DxHome() {
           gateway security (→ tec-api-gateway), or own capability business logic
           (→ domain services) — C-115 §4. Builder code security review → NX.
         </p>
+        <InviteCard />
       </div>
     </main>
   );

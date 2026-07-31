@@ -24,7 +24,7 @@ slug / legal + a read-only portal: **SDK catalog** (@yasser172/*), **starter
 templates**, **capability catalog** (mirrors SYSTEM's C-94 certified capabilities),
 **copy-paste quickstart guides** (+ `/guide/[id]`), and **DX Builder Pro** (the Pi
 Portal "Process a Transaction" gate). A real registry + API-key management + CLI
-are Phase 1+. Not yet deployed.
+are Phase 1+. Deployed (Mainnet) · Pi App ID registered · env set · payment live · referral growth loop wired (C-133).
 
 ---
 
@@ -34,7 +34,7 @@ are Phase 1+. Not yet deployed.
 |-------|-------|
 | **App** | TEC DX |
 | **Domain** | `https://dx.tecosystem.app` |
-| **Pi App ID** | ⏳ TBD — register at Pi Developer Portal · then Vercel `NEXT_PUBLIC_PI_APP_ID` |
+| **Pi App ID** | ✅ Registered (Mainnet) · Vercel `NEXT_PUBLIC_PI_APP_ID` |
 | **APP_SOURCE slug** | `dx` (payment-service resolves `PI_API_KEY_DX`) |
 | **PI_SANDBOX** | `false` (Mainnet) |
 
