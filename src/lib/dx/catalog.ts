@@ -38,7 +38,7 @@ export const TEMPLATES: Template[] = [
     summary: 'The golden starter for a new TEC/Pi app — clone, set your slug, deploy. Portal-ready.',
     ships: [
       'Hub SSO landing (open-redirect-safe) + token refresh',
-      'Dual-mode Pi payment (ADR-007) + CSRF-in-middleware (C-12)',
+      'Dual-mode Pi payment (ADR-007) + CSRF-in-middleware',
       'BFF payment routes (create/approve/complete/resolve)',
       'PiRuntime (PAL) + circuit breaker · feature flags · structured logs',
       'Privacy/Terms legal pages · /api/health · CI policy guards',

@@ -71,7 +71,7 @@ export default function DxHome() {
           <p style={{ fontSize: 14, color: TEC_COLORS.subtext, margin: '6px 0 0', lineHeight: 1.6 }}>
             The developer platform for the Pi economy — SDKs, a Portal-ready starter
             template, certified capabilities, and copy-paste guides. Ship a compliant
-            Pi app in an afternoon (C-115).
+            Pi app in an afternoon.
           </p>
         </header>
 

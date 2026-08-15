@@ -161,8 +161,8 @@ export function DxPro() {
       </div>
       <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 8, lineHeight: 1.5 }}>
         For builders — higher API rate limits, priority support, and early access to
-        new capabilities + templates. Capability certification stays with SYSTEM (C-94);
-        DX distributes, it never certifies (C-115 §4).
+        new capabilities + templates. Capability certification stays with SYSTEM;
+        DX distributes, it never certifies.
       </div>
 
       <button
