@@ -115,7 +115,7 @@ export default function DxHome() {
 
         {/* Certified capabilities */}
         <section style={{ marginTop: 28 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Capabilities <span style={{ fontSize: 12, color: TEC_COLORS.subtext, fontWeight: 600 }}>(certified by SYSTEM · C-94)</span></h2>
+          <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Capabilities <span style={{ fontSize: 12, color: TEC_COLORS.subtext, fontWeight: 600 }}>(certified)</span></h2>
           <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
             {capabilities.map((c) => {
               const st = CAP_STATUS_META[c.status];
@@ -147,9 +147,8 @@ export default function DxHome() {
         </section>
 
         <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '24px 0 0', lineHeight: 1.5 }}>
-          DX distributes; it does NOT certify capabilities (→ SYSTEM/C-94), enforce
-          gateway security (→ tec-api-gateway), or own capability business logic
-          (→ domain services) — C-115 §4. Builder code security review → NX.
+          DX distributes SDKs, templates, and certified capabilities so you can build on
+          Pi quickly. Certification and security are handled by the platform.
         </p>
         <InviteCard />
       </div>

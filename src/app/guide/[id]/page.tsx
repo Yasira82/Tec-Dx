@@ -63,8 +63,7 @@ export default async function GuidePage(
         </pre>
 
         <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '20px 0 0', lineHeight: 1.5 }}>
-          Full anti-regression rules live in the knowledge base (C-12 dual-mode payment,
-          C-123 session/cookies). Set your <code>APP_SOURCE</code> in one place and the
+          Set your <code>APP_SOURCE</code> in one place and the
           matching <code>PI_API_KEY_&lt;SLUG&gt;</code> on payment-service, else Mode-2
           approve fails with Pi 404.
         </p>
