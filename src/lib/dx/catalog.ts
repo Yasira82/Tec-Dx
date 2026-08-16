@@ -38,7 +38,7 @@ export const TEMPLATES: Template[] = [
     summary: 'The golden starter for a new TEC/Pi app — clone, set your slug, deploy. Portal-ready.',
     ships: [
       'Hub SSO landing (open-redirect-safe) + token refresh',
-      'Dual-mode Pi payment (ADR-007) + CSRF-in-middleware (C-12)',
+      'Dual-mode Pi payment (ADR-007) + CSRF-in-middleware',
       'BFF payment routes (create/approve/complete/resolve)',
       'PiRuntime (PAL) + circuit breaker · feature flags · structured logs',
       'Privacy/Terms legal pages · /api/health · CI policy guards',
@@ -65,7 +65,7 @@ export const CAPABILITIES: Capability[] = [
   { id: 'authentication', owner: 'tec-auth-service',      status: 'certified', use: 'Hub SSO — usePiAuth() + cookie session; never handle Pi tokens yourself.' },
   { id: 'asset-transfer', owner: 'tec-asset-service',     status: 'verified',  use: 'Provision/transfer an asset after a verified payment.' },
   { id: 'order-creation', owner: 'tec-commerce-service',  status: 'verified',  use: 'Create an order once payment is approved.' },
-  { id: 'analytics-query', owner: 'tec-analytics-service', status: 'designed',  use: 'Read own-scope aggregates (eventual consistency).' },
+  { id: 'analytics-query', owner: 'tec-analytics-service', status: 'designed',  use: 'Read own-scope aggregates (updates periodically).' },
 ];
 
 export const CAP_STATUS_META: Record<CapStatus, { label: string; tone: 'good' | 'mid' }> = {
@@ -110,7 +110,7 @@ ssoRedirect(HUB_URL, \`\${APP_URL}/app\`);`,
   {
     id: 'set-source',
     title: 'Wire your app source + Pi key',
-    blurb: 'Set APP_SOURCE to your slug (ONE place) and the matching PI_API_KEY_<SLUG> on payment-service — else Mode-2 approve fails with Pi 404 (KB C-12 §11).',
+    blurb: 'Set APP_SOURCE to your slug (ONE place) and the matching PI_API_KEY_<SLUG> on the payment system — else Mode-2 approve fails with Pi 404.',
     lang: 'ts',
     code:
 `// src/lib/app-source.ts

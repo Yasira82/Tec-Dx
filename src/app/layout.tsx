@@ -1,11 +1,12 @@
 import { RefCapture } from '@/components/referral/RefCapture';
 import { RefApply } from '@/components/referral/RefApply';
+import { LocaleProvider } from '@/lib/i18n';
 import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
 
 export const metadata: Metadata = {
   title:       'TEC DX — Build on Pi',
-  description: 'The developer platform for the Pi economy: SDKs, starter templates, certified capabilities, and guides (C-115).',
+  description: 'The developer platform for the Pi economy: SDKs, starter templates, certified capabilities, and guides.',
 };
 
 export default function RootLayout({
@@ -61,9 +62,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <RefCapture />
-        <RefApply />
-        {children}
+        <LocaleProvider>
+          <RefCapture />
+          <RefApply />
+          {children}
+        </LocaleProvider>
       </body>
     </html>
   );

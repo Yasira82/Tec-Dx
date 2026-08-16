@@ -4,14 +4,16 @@
 // the SDKs, starter templates, certified capabilities (from SYSTEM/C-94), and
 // guides that let anyone build on Pi/TEC. DX distributes — it never certifies
 // capabilities (SYSTEM does), enforces gateway security, or owns business logic
-// (C-115 §4). This V1 is a curated read-only catalog served by /api/bff/dx/catalog;
-// a real registry + CLI + API-key management land in Phase 1+.
+// (C-115 §4). App shell: Build / Capabilities / Guides / Settings bottom nav.
 import Link from 'next/link';
-import { InviteCard } from '@/components/referral/InviteCard';
 import { useEffect, useState } from 'react';
 import { usePiAuth } from '@yasser172/tec-auth';
+import { useMe } from '@/lib-client/hooks/useMe';
+import { useTranslation } from '@/lib/i18n';
 import { TEC_COLORS } from '@yasser172/tec-ui';
 import { DxPro } from './components/DxPro';
+import { BottomNav, type DxTab } from './components/BottomNav';
+import { SettingsView } from './components/SettingsView';
 import {
   SDKS, TEMPLATES, CAPABILITIES, CAP_STATUS_META, GUIDES,
   type Sdk, type Template, type Capability, type Guide,
@@ -21,7 +23,12 @@ type GuideSummary = Pick<Guide, 'id' | 'title' | 'blurb' | 'lang'>;
 
 export default function DxHome() {
   const { user, isLoading } = usePiAuth();
-  const name = user?.piUsername ? `@${user.piUsername}` : 'builder';
+  const me = useMe(); // server-resolved Pi username (Pi Browser hides tec_user from client JS — C-123 §3)
+  const { t } = useTranslation();
+  const [tab, setTab] = useState<DxTab>('build');
+
+  const piName = me.username ?? user?.piUsername ?? null;
+  const name = piName ? `@${piName}` : 'builder';
 
   const [copied, setCopied] = useState('');
   const copy = (text: string, id: string) => {
@@ -60,99 +67,108 @@ export default function DxHome() {
   };
   const toneColor = (tone: 'good' | 'mid') => tone === 'good' ? TEC_COLORS.success : TEC_COLORS.gold;
 
+  const title =
+    tab === 'capabilities' ? t.dx.nav.capabilities
+    : tab === 'guides' ? t.dx.nav.guides
+    : tab === 'settings' ? t.dx.nav.settings
+    : (isLoading ? t.dx.welcome : t.dx.welcomeName.replace('{name}', name));
+
   return (
-    <main style={{ minHeight: '100vh', background: TEC_COLORS.bg, color: TEC_COLORS.text, padding: '32px 22px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      <div style={{ maxWidth: 780, margin: '0 auto' }}>
+    <main style={{ minHeight: '100vh', background: TEC_COLORS.bg, color: TEC_COLORS.text, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <div style={{ maxWidth: 780, margin: '0 auto', padding: '32px 22px calc(96px + env(safe-area-inset-bottom))' }}>
         <header>
-          <div style={{ fontSize: 12, letterSpacing: 1, color: TEC_COLORS.subtext, textTransform: 'uppercase' }}>TEC DX · Developer Platform</div>
-          <h1 style={{ fontSize: 26, fontWeight: 900, color: TEC_COLORS.gold, margin: '6px 0 0' }}>
-            {isLoading ? 'Build on Pi' : `Build on Pi, ${name}`}
-          </h1>
-          <p style={{ fontSize: 14, color: TEC_COLORS.subtext, margin: '6px 0 0', lineHeight: 1.6 }}>
-            The developer platform for the Pi economy — SDKs, a Portal-ready starter
-            template, certified capabilities, and copy-paste guides. Ship a compliant
-            Pi app in an afternoon (C-115).
-          </p>
+          <div style={{ fontSize: 12, letterSpacing: 1, color: TEC_COLORS.subtext, textTransform: 'uppercase' }}>{t.dx.brand}</div>
+          <h1 style={{ fontSize: 26, fontWeight: 900, color: TEC_COLORS.gold, margin: '6px 0 0' }}>{title}</h1>
+          {tab === 'build' && (
+            <p style={{ fontSize: 14, color: TEC_COLORS.subtext, margin: '6px 0 0', lineHeight: 1.6 }}>{t.dx.subtitle}</p>
+          )}
         </header>
 
-        {/* Builder Pro — real Pi U2A payment (service subscription). */}
-        <DxPro />
+        {tab === 'build' && (
+          <>
+            {/* Builder Pro — real Pi U2A payment (service subscription). */}
+            <DxPro />
 
-        {/* SDKs */}
-        <section style={{ marginTop: 28 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>SDKs</h2>
-          <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {sdks.map((s) => (
-              <div key={s.id} style={card}>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{s.name}</span>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: TEC_COLORS.gold, border: `1px solid ${TEC_COLORS.gold}44`, borderRadius: 999, padding: '2px 8px' }}>{s.scope}</span>
-                </div>
-                <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{s.purpose}</div>
-                <div style={codeBox} onClick={() => copy(s.install, s.id)} role="button" title="Copy">
-                  {s.install}  {copied === s.id ? '✓ copied' : ''}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Starter templates */}
-        <section style={{ marginTop: 28 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Starter templates</h2>
-          <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {templates.map((t) => (
-              <div key={t.id} style={card}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.gold }}>{t.name}</div>
-                <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{t.summary}</div>
-                <ul style={{ margin: '8px 0 0', paddingLeft: 16 }}>
-                  {t.ships.map((x) => <li key={x} style={{ fontSize: 12, color: TEC_COLORS.subtext, lineHeight: 1.7 }}>{x}</li>)}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Certified capabilities */}
-        <section style={{ marginTop: 28 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Capabilities <span style={{ fontSize: 12, color: TEC_COLORS.subtext, fontWeight: 600 }}>(certified by SYSTEM · C-94)</span></h2>
-          <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {capabilities.map((c) => {
-              const st = CAP_STATUS_META[c.status];
-              return (
-                <div key={c.id} style={card}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
-                    <span style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{c.id}</span>
-                    <span style={{ fontSize: 10, fontWeight: 800, whiteSpace: 'nowrap', color: toneColor(st.tone), border: `1px solid ${toneColor(st.tone)}55`, borderRadius: 999, padding: '2px 8px' }}>{st.label}</span>
+            {/* SDKs */}
+            <section style={{ marginTop: 28 }}>
+              <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>{t.dx.sdks}</h2>
+              <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
+                {sdks.map((sd) => (
+                  <div key={sd.id} style={card}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
+                      <span style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{sd.name}</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: TEC_COLORS.gold, border: `1px solid ${TEC_COLORS.gold}44`, borderRadius: 999, padding: '2px 8px' }}>{sd.scope}</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{sd.purpose}</div>
+                    <div style={codeBox} onClick={() => copy(sd.install, sd.id)} role="button" title="Copy">
+                      {sd.install}  {copied === sd.id ? '✓ copied' : ''}
+                    </div>
                   </div>
-                  <div style={{ fontSize: 11, color: TEC_COLORS.gold, marginTop: 3 }}>owner: {c.owner}</div>
-                  <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{c.use}</div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+                ))}
+              </div>
+            </section>
 
-        {/* Quickstart guides */}
-        <section style={{ marginTop: 28 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>Quickstart</h2>
-          <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {guides.map((g) => (
-              <Link key={g.id} href={`/guide/${g.id}`} style={{ ...card, display: 'block', textDecoration: 'none' }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{g.title} →</div>
-                <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{g.blurb}</div>
-              </Link>
-            ))}
-          </div>
-        </section>
+            {/* Starter templates */}
+            <section style={{ marginTop: 28 }}>
+              <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>{t.dx.templates}</h2>
+              <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
+                {templates.map((tp) => (
+                  <div key={tp.id} style={card}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.gold }}>{tp.name}</div>
+                    <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{tp.summary}</div>
+                    <ul style={{ margin: '8px 0 0', paddingLeft: 16 }}>
+                      {tp.ships.map((x) => <li key={x} style={{ fontSize: 12, color: TEC_COLORS.subtext, lineHeight: 1.7 }}>{x}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
 
-        <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '24px 0 0', lineHeight: 1.5 }}>
-          DX distributes; it does NOT certify capabilities (→ SYSTEM/C-94), enforce
-          gateway security (→ tec-api-gateway), or own capability business logic
-          (→ domain services) — C-115 §4. Builder code security review → NX.
-        </p>
-        <InviteCard />
+            <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '24px 0 0', lineHeight: 1.5 }}>{t.dx.footer}</p>
+          </>
+        )}
+
+        {tab === 'capabilities' && (
+          /* Certified capabilities */
+          <section style={{ marginTop: 8 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>{t.dx.capabilities} <span style={{ fontSize: 12, color: TEC_COLORS.subtext, fontWeight: 600 }}>{t.dx.certified}</span></h2>
+            <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
+              {capabilities.map((c) => {
+                const st = CAP_STATUS_META[c.status];
+                return (
+                  <div key={c.id} style={card}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
+                      <span style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{c.id}</span>
+                      <span style={{ fontSize: 10, fontWeight: 800, whiteSpace: 'nowrap', color: toneColor(st.tone), border: `1px solid ${toneColor(st.tone)}55`, borderRadius: 999, padding: '2px 8px' }}>{st.label}</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: TEC_COLORS.gold, marginTop: 3 }}>owner: {c.owner}</div>
+                    <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{c.use}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {tab === 'guides' && (
+          /* Quickstart guides */
+          <section style={{ marginTop: 8 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>{t.dx.quickstart}</h2>
+            <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
+              {guides.map((g) => (
+                <Link key={g.id} href={`/guide/${g.id}`} style={{ ...card, display: 'block', textDecoration: 'none' }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>{g.title} →</div>
+                  <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{g.blurb}</div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {tab === 'settings' && <SettingsView />}
       </div>
+
+      <BottomNav active={tab} onSelect={setTab} />
     </main>
   );
 }
