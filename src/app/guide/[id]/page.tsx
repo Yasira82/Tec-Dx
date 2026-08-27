@@ -58,7 +58,7 @@ export default async function GuidePage(
         <h1 style={{ fontSize: 24, fontWeight: 900, color: TEC_COLORS.gold, margin: '4px 0 0' }}>{g.title}</h1>
         <p style={{ fontSize: 14, color: TEC_COLORS.subtext, margin: '12px 0 0', lineHeight: 1.6 }}>{g.blurb}</p>
 
-        <pre style={{ background: '#0a0a12', border: `1px solid ${TEC_COLORS.gold}22`, borderRadius: 10, padding: 16, marginTop: 18, overflowX: 'auto', fontSize: 12.5, lineHeight: 1.6, color: '#d7d7e0', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
+        <pre style={{ background: '#0B1020', border: `1px solid ${TEC_COLORS.gold}22`, borderRadius: 10, padding: 16, marginTop: 18, overflowX: 'auto', fontSize: 12.5, lineHeight: 1.6, color: '#d7d7e0', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
           <code>{g.code}</code>
         </pre>
 
