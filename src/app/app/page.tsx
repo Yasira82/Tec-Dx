@@ -61,7 +61,7 @@ export default function DxHome() {
     borderRadius: 12, padding: 14,
   };
   const codeBox: React.CSSProperties = {
-    background: '#0a0a12', border: `1px solid ${TEC_COLORS.gold}22`, borderRadius: 8,
+    background: '#0B1020', border: `1px solid ${TEC_COLORS.gold}22`, borderRadius: 8,
     padding: '10px 12px', marginTop: 8, fontSize: 12, color: '#d7d7e0', overflowX: 'auto',
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', whiteSpace: 'pre',
   };
