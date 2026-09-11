@@ -12,6 +12,7 @@ import { HUB_HOSTS }                 from '@/lib/pi-network';
 const ALLOWED_AUDIENCES = [
   'https://tec-dx.vercel.app',
   'https://dx.tecosystem.app',
+  'https://dx-test.tecosystem.app',
 ];
 const DEFAULT_REDIRECT = '/app';
 
