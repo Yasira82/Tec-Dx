@@ -26,14 +26,16 @@ export const en = {
     brand:       'TEC DX · Developer Platform',
     welcome:     'Build on Pi',
     welcomeName: 'Build on Pi, {name}',
-    subtitle:    'The developer platform for the Pi economy — SDKs, a Portal-ready starter template, certified capabilities, and copy-paste guides. Ship a compliant Pi app in an afternoon.',
+    subtitle:    'The developer platform for the Pi economy — SDKs, a Portal-ready starter template, a capability catalog, and copy-paste guides. Ship a Portal-ready Pi app in an afternoon.',
     nav: { build: 'Build', capabilities: 'Capabilities', guides: 'Guides', settings: 'Settings' },
     sdks: 'SDKs',
     templates: 'Starter templates',
     capabilities: 'Capabilities',
-    certified: '(certified)',
+    // C6 — the list holds Certified, Verified and Designed capabilities; the heading
+    // no longer promises more than half of it delivers. Each card shows its own status.
+    certified: '· status on each card',
     quickstart: 'Quickstart',
-    footer:      'DX distributes SDKs, templates, and certified capabilities so you can build on Pi quickly. Certification and security are handled by the platform.',
+    footer:      'DX distributes SDKs, templates and the capability catalog so you can build on Pi quickly. DX certifies nothing: a capability\'s status is decided by TEC System (C-94), and only a Certified one is ready to depend on.',
     settings: {
       profile: 'Profile', planFree: 'Free', planPro: 'Pro',
       connectedPi: 'Connected to Pi', notSignedIn: 'Not signed in', member: 'TEC Member',

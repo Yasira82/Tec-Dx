@@ -10,7 +10,7 @@ import { QuestReturn } from '@/components/pioneer/QuestReturn';
 
 export const metadata: Metadata = {
   title:       'TEC DX — Build on Pi',
-  description: 'The developer platform for the Pi economy: SDKs, starter templates, certified capabilities, and guides.',
+  description: 'The developer platform for the Pi economy: SDKs, starter templates, a capability catalog, and guides.',
 };
 
 export default function RootLayout({
