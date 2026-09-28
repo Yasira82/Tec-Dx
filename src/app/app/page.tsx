@@ -129,7 +129,7 @@ export default function DxHome() {
         )}
 
         {tab === 'capabilities' && (
-          /* Certified capabilities */
+          /* Capability catalog — each card carries its own status (C6) */
           <section style={{ marginTop: 8 }}>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>{t.dx.capabilities} <span style={{ fontSize: 12, color: TEC_COLORS.subtext, fontWeight: 600 }}>{t.dx.certified}</span></h2>
             <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
