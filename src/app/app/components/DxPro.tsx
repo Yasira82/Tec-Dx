@@ -13,6 +13,7 @@ import {
   createPaymentRecord,
   createU2APayment,
 } from '@/lib/pi-payment';
+import { CancelProButton } from '@/components/pro/CancelProButton';
 
 const PRICE   = 10;                        // π / month
 const ITEM_ID = 'dx_pro_monthly';
@@ -134,6 +135,7 @@ export function DxPro() {
             {daysRemaining <= 7 ? '⏳ ' : ''}Expires in {daysRemaining} day{daysRemaining === 1 ? '' : 's'}{daysRemaining <= 7 ? ' — re-subscribe to keep Pro (one-time monthly, no auto-renewal).' : '.'}
           </div>
         )}
+        <CancelProButton />
       </div>
     );
   }
