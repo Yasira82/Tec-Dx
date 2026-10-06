@@ -1,5 +1,7 @@
 'use client';
 
+import { SignInGate } from '@/components/pi/SignInGate';
+
 // TEC DX — the Developer Platform (C-115). "How do I build on Pi?" DX distributes
 // the SDKs, starter templates, certified capabilities (from SYSTEM/C-94), and
 // guides that let anyone build on Pi/TEC. DX distributes — it never certifies
@@ -21,7 +23,7 @@ import {
 
 type GuideSummary = Pick<Guide, 'id' | 'title' | 'blurb' | 'lang'>;
 
-export default function DxHome() {
+function DxHome() {
   const { user, isLoading } = usePiAuth();
   const me = useMe(); // server-resolved Pi username (Pi Browser hides tec_user from client JS — C-123 §3)
   const { t } = useTranslation();
@@ -171,4 +173,11 @@ export default function DxHome() {
       <BottomNav active={tab} onSelect={setTab} />
     </main>
   );
+}
+
+// The door: a sign-in button before any screen when there is no session
+// (SignInGate — C-123 §10; owner, 2026-10-06). A visit from the Hub arrives
+// signed in (§12) and goes straight through.
+export default function DxHomeGated() {
+  return <SignInGate><DxHome /></SignInGate>;
 }
