@@ -2,6 +2,7 @@ import {
   SDKS, TEMPLATES, CAPABILITIES, GUIDES, getGuide,
   type Sdk, type Template, type Capability, type CapStatus, type Guide,
 } from './catalog';
+import { gatewayFetch } from '@/lib/gateway-fetch';
 
 // Server-only DX backend access (C-115). Calls the real DX developer catalog
 // (identity-service) via the gateway with the inter-service key, and maps the
@@ -73,7 +74,7 @@ export async function resolveCatalog(): Promise<ResolvedCatalog> {
   const sampleGuides = GUIDES.map(({ id, title, blurb, lang }) => ({ id, title, blurb, lang }));
   if (GW) {
     try {
-      const res = await fetch(`${GW}/api/identity/dx/catalog`, { headers: gwHeaders(), cache: 'no-store' });
+      const res = await gatewayFetch(`${GW}/api/identity/dx/catalog`, { headers: gwHeaders(), cache: 'no-store' });
       if (res.ok) {
         const data = (await res.json().catch(() => null))?.data;
         if (data && Array.isArray(data.sdks)) {
@@ -98,7 +99,7 @@ export interface ResolvedGuide { guide: Guide | null; source: 'live' | 'catalog'
 export async function resolveGuide(id: string): Promise<ResolvedGuide> {
   if (GW) {
     try {
-      const res = await fetch(`${GW}/api/identity/dx/guide/${encodeURIComponent(id)}`, {
+      const res = await gatewayFetch(`${GW}/api/identity/dx/guide/${encodeURIComponent(id)}`, {
         headers: gwHeaders(), cache: 'no-store',
       });
       if (res.ok) {
