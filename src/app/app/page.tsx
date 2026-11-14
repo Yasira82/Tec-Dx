@@ -102,9 +102,11 @@ function DxHome() {
                       <span style={{ fontSize: 10, fontWeight: 700, color: TEC_COLORS.gold, border: `1px solid ${TEC_COLORS.gold}44`, borderRadius: 999, padding: '2px 8px' }}>{sd.scope}</span>
                     </div>
                     <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{sd.purpose}</div>
-                    <div style={codeBox} onClick={() => copy(sd.install, sd.id)} role="button" title="Copy">
+                    {/* A real button: a `div role="button"` could not be reached from a keyboard. */}
+                    <button type="button" onClick={() => copy(sd.install, sd.id)} title="Copy"
+                      style={{ ...codeBox, display: 'block', width: '100%', textAlign: 'start', cursor: 'pointer' }}>
                       {sd.install}  {copied === sd.id ? '✓ copied' : ''}
-                    </div>
+                    </button>
                   </div>
                 ))}
               </div>
